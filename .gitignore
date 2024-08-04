@@ -22,3 +22,6 @@ vite.config.ts.timestamp-*
 
 # IDE's
 .idea/
+
+# Test containers
+src/test/pgdata

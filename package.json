@@ -1,7 +1,10 @@
 {
-	"name": "yellow-mobile",
+  "name": "yellow-candidate-project-jans",
 	"version": "0.0.1",
 	"private": true,
+  "author": {
+    "name": "Jans Rautenbach"
+  },
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
@@ -12,7 +15,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+      "test:unit": "vitest",
+      "drizzle-generate": "drizzle-kit generate"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -20,6 +24,8 @@
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^9.6.0",
+      "dotenv": "^16.4.5",
+      "drizzle-kit": "^0.23.1",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
@@ -33,5 +39,9 @@
 		"vite": "^5.0.3",
 		"vitest": "^2.0.0"
 	},
-	"type": "module"
+  "type": "module",
+  "dependencies": {
+    "drizzle-orm": "^0.32.1",
+    "postgres": "^3.4.4"
+  }
 }
