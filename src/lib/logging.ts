@@ -1,24 +1,25 @@
 // Why add a dependency when you can make a logger in less than a kb?
-export class Logger {
-	prefix: string;
 
-	constructor(prefix: string) {
+export class Logger {
+	private readonly prefix: string;
+
+	public constructor(prefix: string) {
 		this.prefix = prefix;
 	}
 
-	info(message: string) {
-		console.log(this.prefix, 'INFO', message);
+	public info(message: any) {
+		console.info(this.prefix, message);
 	}
 
-	debug(message: string) {
-		console.log(this.prefix, 'DEBUG', message);
+	public debug(message: any) {
+		console.debug(this.prefix, message);
 	}
 
-	warn(message: string) {
-		console.log(this.prefix, 'WARN', message);
+	public warn(message: any) {
+		console.warn(this.prefix, message);
 	}
 
-	error(message: string) {
-		console.log(this.prefix, 'ERROR', message);
+	public error(message: any) {
+		console.error(this.prefix, message);
 	}
 }
