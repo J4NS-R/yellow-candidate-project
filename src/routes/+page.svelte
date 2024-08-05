@@ -42,4 +42,5 @@
 	<div class="">
 		<Button on:click={onSubmit}>Register</Button>
 	</div>
+	<div class="bg-primary-700" style="display: none;" />
 </form>
