@@ -3,16 +3,14 @@
 
 	/** @type {import('./$types').ActionData} */
 	export let form;
-
 	/** @type {import('./$types').PageData} */
 	export let data;
-
 	const pageData = form ? form : data;
 </script>
 
 {#if pageData?.approved}
 	<Alert color="green" class="bg-green-200">
-		<p class="font-medium">{pageData?.customer?.fullName}</p>
+		<p class="font-medium text-lg">{pageData?.customer?.fullName}</p>
 		<p>Registered successfully.</p>
 	</Alert>
 {/if}
@@ -23,6 +21,9 @@
 	</Alert>
 {/if}
 
-<div class="mt-6">
-	<Button href="/">Home</Button>
+<div class="mt-6 rounded-full">
+	<Button href="/" pill>Home</Button>
+	{#if pageData?.approved}
+		<Button href="/register/device" pill>Register Device</Button>
+	{/if}
 </div>

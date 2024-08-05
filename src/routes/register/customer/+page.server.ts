@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 const MIN_AGE = parseInt(env.VITE_MIN_AGE);
 const MAX_AGE = parseInt(env.VITE_MAX_AGE);
 
-const log = new Logger('/register.server');
+const log = new Logger('/register/customer.server');
 
 
 /**
