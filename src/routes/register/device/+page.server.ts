@@ -30,6 +30,7 @@ export async function load(ev) {
 	};
 }
 
+// Handle form POST
 export const actions = {
 	default: async (ev) => {
 		const formData = await ev.request.formData();
@@ -37,7 +38,7 @@ export const actions = {
 		log.debug('Inserting new phone sale');
 		const phoneSale = (await db.insert(schema.phoneSalesTable).values({
 			customerId: parseInt(formData.get('customerid')!.toString()),
-			amountMinor: Math.round(parseInt(formData.get('amountzar')!.toString()) * 100),
+			amountMinor: Math.round(parseFloat(formData.get('amountzar')!.toString()) * 100),
 			makeAndModel: formData.get('makeandmodel')!.toString(),
 			imei: formData.get('imei')!.toString()
 		}).returning())[0];

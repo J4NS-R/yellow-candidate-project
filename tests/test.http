@@ -1,0 +1,8 @@
+# @name Approve Payment
+POST localhost:3000/webhook/payment-status
+Content-Type: application/json
+
+{
+  "phoneSaleId": 2,
+  "paymentStatus": "approved"
+}
