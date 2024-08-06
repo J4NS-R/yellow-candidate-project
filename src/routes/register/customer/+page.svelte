@@ -22,7 +22,7 @@
 {/if}
 
 <div class="mt-6 rounded-full">
-	<Button href="/" pill>Home</Button>
+	<Button href="/?signout=true" pill>Sign Out</Button>
 	{#if pageData?.approved}
 		<Button href="/register/device" pill>Register Device</Button>
 	{/if}

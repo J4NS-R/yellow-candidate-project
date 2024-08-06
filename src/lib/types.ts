@@ -23,6 +23,8 @@ export interface TelcoPaymentRequest {
 }
 
 export interface TelcoPaymentResponse {
-	paymentStatus: string,
+	paymentStatus: PaymentStatus,
 	paymentId: string,
 }
+
+export type PaymentStatus = 'unstarted' | 'processing' | 'approved' | 'rejected';

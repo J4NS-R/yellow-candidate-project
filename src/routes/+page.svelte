@@ -5,10 +5,10 @@
 	/** @type {import('$lib/types').SimpleFormProps} */
 	const formConfig = {
 		fields: [
-			{ label: 'Full Name', value: 'Piet' },
-			{ label: 'ID or Passport number', value: '1234' },
-			{ label: 'Date of Birth', placeholder: 'YYYY-MM-DD', value: '1980-01-01' },
-			{ label: 'Phone number', value: '4321' }
+			{ label: 'Full Name' },
+			{ label: 'ID or Passport number' },
+			{ label: 'Date of Birth', placeholder: 'YYYY-MM-DD' },
+			{ label: 'Phone number' }
 		],
 		postPath: '/register/customer',
 		buttonText: 'Register'

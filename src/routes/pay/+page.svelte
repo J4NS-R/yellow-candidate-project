@@ -1,10 +1,11 @@
 <script>
-	import { Alert, Button } from 'flowbite-svelte';
+	import { Alert, Button, Spinner } from 'flowbite-svelte';
 	import { writable } from 'svelte/store';
-	import { CheckCircleSolid, InfoCircleOutline } from 'flowbite-svelte-icons';
+	import { CheckCircleOutline, ExclamationCircleOutline, InfoCircleOutline } from 'flowbite-svelte-icons';
 	import { Logger } from '$lib/logging';
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
+	import { getAmount } from '$lib/common';
 
 	const log = new Logger('/pay.client');
 
@@ -34,18 +35,11 @@
 		};
 	});
 
-	/**
-	 * Convert minor denomination to 2-decimal currency string
-	 */
-	function getAmount() {
-		const amountMinor = data.phoneSale?.amountMinor || -1;
-		return (amountMinor / 100).toFixed(2);
-	}
-
-	// TODO get status from db
+	// Setup state
 	export const state = writable({
-		paymentStatus: 'unstarted'
+		paymentStatus: data.paymentStatus
 	});
+	log.debug('paymentStatus: ' + $state.paymentStatus);
 
 	async function startPayment() {
 		/** @type {import('$lib/types').InternalPaymentRequest}*/
@@ -54,12 +48,14 @@
 			customerId: data.phoneSale.customerId
 		};
 
+		log.debug(`Requesting payment for saleId=${paymentRequest.phoneSaleId}`);
 		const resp = await fetch(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/api/payment/init`, {
 			method: 'POST',
 			body: JSON.stringify(paymentRequest)
 		});
 
 		if (resp.status === 202) {
+			log.debug(`Payment status: ${resp.status}`);
 			/** @type {import('$lib/types').TelcoPaymentResponse}*/
 			const respBody = await resp.json();
 			state.set({
@@ -72,26 +68,43 @@
 	}
 </script>
 
-<h2 class="text-lg">Settle Account</h2>
+<h2 class="text-lg mb-4">Settle Account</h2>
 
 {#if $state.paymentStatus === 'unstarted'}
 	<Alert color="gray" class="bg-gray-200">
-		<InfoCircleOutline slot="icon" class="w-8 h-8" />
-		<p>Outstanding amount: R{getAmount()}</p>
+		<InfoCircleOutline slot="icon" class="w-8 h-8 mr-3" />
+		<p>Outstanding amount: R{getAmount(data.phoneSale)}</p>
 	</Alert>
-	<Button on:click={startPayment}>Pay Now</Button>
+	<div class="mt-6">
+		<Button on:click={startPayment}>Pay Now</Button>
+	</div>
 {/if}
+
 {#if $state.paymentStatus === 'processing'}
 	<Alert color="gray" class="bg-gray-200">
-		<InfoCircleOutline slot="icon" class="w-8 h-8" />
-		<p>Processing payment</p>
+		<Spinner slot="icon" class="fill-yellow-400 animate-spin" color="yellow" size={8} />
+		<p class="ml-3">Processing payment</p>
 		<!-- TODO loading -->
 	</Alert>
+	<div class="mt-6">
+		<Button on:click={() => state.set({paymentStatus: 'unstarted'})}>Cancel</Button>
+	</div>
 {/if}
+
+{#if $state.paymentStatus === 'rejected'}
+	<Alert color="red" class="bg-red-200">
+		<ExclamationCircleOutline slot="icon" class="w-8 h-8" />
+		<p>Payment rejected.</p>
+	</Alert>
+	<div class="mt-6">
+		<Button on:click={() => state.set({paymentStatus: 'unstarted'})}>Restart</Button>
+	</div>
+{/if}
+
 {#if $state.paymentStatus === 'approved'}
 	<Alert color="green" class="bg-green-200">
-		<CheckCircleSolid slot="icon" class="w-8 h-8" />
-		<p>Payment Approved: R{getAmount()}</p>
+		<CheckCircleOutline slot="icon" class="w-8 h-8" />
+		<p>Payment Approved: R{getAmount(data.phoneSale)}</p>
 	</Alert>
 {/if}
 

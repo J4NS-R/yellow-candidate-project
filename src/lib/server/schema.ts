@@ -20,3 +20,12 @@ export const phoneSalesTable = pgTable('phone_sales', {
 	makeAndModel: text('make_model').notNull(),
 	imei: text('imei').notNull()
 });
+
+export const paymentsTable = pgTable('payments', {
+	saleId: integer('sale_id').notNull().primaryKey().references(() => phoneSalesTable.id, { onDelete: 'cascade' }),
+	paymentId: varchar('payment_id', { length: 64 }).notNull().unique(),
+	paymentStatus: varchar('status', {
+		length: 20,
+		enum: ['unstarted', 'processing', 'approved', 'rejected']
+	}).notNull().default('unstarted')
+});

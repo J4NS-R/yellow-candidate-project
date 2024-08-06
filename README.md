@@ -34,4 +34,5 @@ pnpm run drizzle-generate
 - Login/session system; Pull phone sale data from server by customerId.
 - Security on /webhook/payment-status endpoint
 - Handle websocket client termination (payment approved after client disconnects)
-- Hanlde malformed messages in websocket
+- Handle malformed messages in websocket
+- Handle multiple payment attempts. Currently, if a user starts a new payment previous attempts are discarded.

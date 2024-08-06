@@ -49,8 +49,19 @@ export async function POST(req) {
 		}));
 	}
 
-	log.info('Upstream payment initiated.');
-	// TODO store tran in DB
+	log.info(`Upstream payment initiated :${JSON.stringify(telcoDetail)}`);
+	await db.insert(schema.paymentsTable).values({
+		saleId: phoneSale.id,
+		paymentStatus: telcoDetail.paymentStatus,
+		paymentId: telcoDetail.paymentId
+	}).onConflictDoUpdate({
+		target: schema.paymentsTable.saleId,
+		set: {
+			paymentStatus: telcoDetail.paymentStatus,
+			paymentId: telcoDetail.paymentId
+		}
+	});
+
 	return new Response(JSON.stringify({
 		'paymentStatus': telcoDetail.paymentStatus
 	}), { status: telcoResp.status });

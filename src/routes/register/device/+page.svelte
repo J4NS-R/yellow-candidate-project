@@ -2,6 +2,7 @@
 	import { Alert, Button } from 'flowbite-svelte';
 	import SimpleForm from '$lib/client/simple-form.svelte';
 	import { CheckCircleSolid } from 'flowbite-svelte-icons';
+	import { getAmount } from '$lib/common';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -17,13 +18,10 @@
 			value: data.customerId + ''
 		}, {
 			label: 'Amount (ZAR)',
-			value: '1999.50'
 		}, {
 			label: 'Make and Model',
-			value: 'Samsung Galaxy S20'
 		}, {
 			label: 'IMEI',
-			value: '12345'
 		}],
 		buttonText: 'Register Device',
 		postPath: '/register/device'
@@ -34,8 +32,9 @@
 
 {#if pageData?.registered}
 	<Alert color="green" class="bg-green-200">
-		<CheckCircleSolid slot="icon" class="w-8 h-8" />
+		<CheckCircleSolid slot="icon" class="w-8 h-8 mr-3" />
 		<p>Your {pageData?.phoneSale?.makeAndModel} is registered.</p>
+		<p>Value: R{getAmount(pageData?.phoneSale)}</p>
 	</Alert>
 {/if}
 

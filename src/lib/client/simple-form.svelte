@@ -5,7 +5,7 @@
 	export let props;
 	const formFields = props.fields.map(field => ({
 		...field,
-		value: field.value || 'sample-text',
+		value: field.value || '',
 		id: field.label.toLowerCase().replace(/[ ()]/g, '')
 	}));
 	/** @type HTMLFormElement */

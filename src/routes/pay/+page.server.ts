@@ -13,14 +13,18 @@ export async function load(ev) {
 
 	const customerId = parseInt(ev.cookies.get('customerId')!);
 	const phoneSaleId = parseInt(ev.cookies.get('phoneSaleId')!);
-	const phoneSale = await db.query.phoneSalesTable.findFirst({
-		where: and(
-			eq(schema.phoneSalesTable.customerId, customerId),
-			eq(schema.phoneSalesTable.id, phoneSaleId)
-		)
-	});
+
+	const saleData = await db.select().from(schema.phoneSalesTable).where(and(
+		eq(schema.phoneSalesTable.customerId, customerId),
+		eq(schema.phoneSalesTable.id, phoneSaleId)
+	)).leftJoin(schema.paymentsTable, eq(schema.paymentsTable.saleId, schema.phoneSalesTable.id))
+		.limit(1);
+
+	const phoneSale = saleData[0].phone_sales!;
+	const paymentStatus = saleData[0].payments?.paymentStatus;
 
 	return {
-		phoneSale: phoneSale!
+		phoneSale: phoneSale,
+		paymentStatus: paymentStatus || 'unstarted'
 	};
 }

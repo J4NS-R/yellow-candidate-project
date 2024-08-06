@@ -25,7 +25,7 @@ services:
       - "8080:8080"
     volumes:
       - "./wiremock:/home/wiremock"
-    env:
+    environment:
       WIREMOCK_OPTIONS: >
         --port 8080
         --max-request-journal-entries 20
