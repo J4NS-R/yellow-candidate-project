@@ -16,3 +16,16 @@ services:
       start_period: 30s
     volumes:
       - "./pgdata:/var/lib/postgresql/data"
+
+  # Mock the payment provider (telco)
+  # See ./wiremock/mappings/README.md
+  wiremock:
+    image: wiremock/wiremock:3x
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./wiremock:/home/wiremock"
+    env:
+      WIREMOCK_OPTIONS: >
+        --port 8080
+        --max-request-journal-entries 20

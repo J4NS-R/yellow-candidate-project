@@ -21,6 +21,6 @@ export async function load(ev) {
 	});
 
 	return {
-		phoneSale
+		phoneSale: phoneSale!
 	};
 }

@@ -13,7 +13,7 @@ export const customersTable = pgTable('customers', {
 
 export const phoneSalesTable = pgTable('phone_sales', {
 	id: serial('id').primaryKey(),
-	customerId: integer('customer_id').references(() => customersTable.id, { onDelete: 'cascade' }),
+	customerId: integer('customer_id').notNull().references(() => customersTable.id, { onDelete: 'cascade' }),
 	saleDate: timestamp('sale_date').notNull().defaultNow(),
 	amountMinor: integer('amount_minor').notNull(),
 	currency: varchar('currency', { length: 3 }).default('ZAR'),

@@ -1,8 +1,18 @@
-# @name Approve Payment
-POST localhost:3000/webhook/payment-status
+# @name Manual Webhook Trigger
+POST localhost:3000/websocket/3
 Content-Type: application/json
 
 {
-  "phoneSaleId": 2,
+  "phoneSaleId": 3,
   "paymentStatus": "approved"
+}
+
+###
+# @name Wiremock test
+POST localhost:8080/payment
+Content-Type: application/json
+
+{
+  "idOrPassport": "123",
+  "amountMinor": 5000
 }

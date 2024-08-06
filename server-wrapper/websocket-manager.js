@@ -1,13 +1,10 @@
 import { WebSocketServer } from 'ws';
 
-/** @type {Map<number, {statusCallback: (string)=>void}>} */
-const state = new Map();
+/** @type {Map<number, (string)=>void>} */
+const connectedClients = new Map();
 
-function newCallback(socket, phoneSaleId) {
-	return (paymentStatus) => {
-		// TODO send msg to svelte to update DB
-
-		let payload = JSON.stringify({ paymentStatus });
+function newCallback(socket) {
+	return (payload) => {
 		console.debug(`Sending payload downstream: ${payload}`);
 		socket.send(payload);
 	};
@@ -22,18 +19,20 @@ wsServer.on('connection', socket => {
 		/** @type {{phoneSaleId: number}} */
 		const parsed = JSON.parse(message);
 
-		state.set(parsed.phoneSaleId, {
-			statusCallback: newCallback(socket, parsed.phoneSaleId)
-		});
-		console.log(`Callback registered with id=${parsed.phoneSaleId}`);
+		connectedClients.set(parsed.phoneSaleId, newCallback(socket, parsed.phoneSaleId));
+		console.log(`Connection registered with id=${parsed.phoneSaleId}`);
 	});
 });
 
-export function handleStatusCallback(phoneSaleId, paymentStatus) {
-	if (!state.has(phoneSaleId)) {
-		console.warn(`Cannot execute status callback because phoneSaleId ${phoneSaleId} is not registered.`);
+export function sendWebsocketMessage(clientId, body) {
+	if (!connectedClients.has(clientId)) {
+		console.warn(`Cannot execute status callback because clientId ${clientId} is not registered.`);
 		return;
 	}
 
-	state.get(phoneSaleId).statusCallback(paymentStatus);
+	if (typeof body === 'object') {
+		body = JSON.stringify(body);
+	}
+
+	connectedClients.get(clientId)(body);
 }

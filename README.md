@@ -3,6 +3,9 @@
 ## Development
 
 ```sh
+# Install pnpm (10x better than npm)
+sudo npm install -g pnpm
+
 cp .env.example .env.local
 tests/docker/start_testcontainers.sh
 pnpm install
