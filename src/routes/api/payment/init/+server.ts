@@ -8,10 +8,8 @@ import { Logger } from '$lib/logging';
 const log = new Logger('/api/payment/init.server');
 
 export async function POST(req) {
-	// TODO auth
 	const body: InternalPaymentRequest = await req.request.json();
 
-	// TODO make a lib
 	const saleCustomerData = await db.select().from(schema.phoneSalesTable)
 		.where(
 			and(

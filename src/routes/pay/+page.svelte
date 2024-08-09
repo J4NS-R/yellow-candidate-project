@@ -63,7 +63,6 @@
 				paymentStatus: respBody.paymentStatus
 			});
 		} else {
-			// TODO handle
 			log.error('Payment request failed');
 		}
 	}

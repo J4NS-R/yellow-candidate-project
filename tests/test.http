@@ -1,6 +1,7 @@
 # @name Manual Websocket Event
 POST localhost:3000/websocket/3
 Content-Type: application/json
+X-API-KEY: api-key
 
 {
   "phoneSaleId": 3,

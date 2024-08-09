@@ -32,8 +32,9 @@ npx playwright test --ui
 - Custom db indexes, to speed up lookups.
 - DB partitioning for cleaning
 - Assuming currency=ZAR
-- Login/session system
+- Login/session system (eg auth on payment init)
 - Security on /webhook/payment-status endpoint
 - Handle websocket client termination (payment approved after client disconnects)
 - Handle malformed messages in websocket
 - Handle multiple payment attempts. Currently, if a user starts a new payment previous attempts are discarded.
+- Handle telco payment auth rejection

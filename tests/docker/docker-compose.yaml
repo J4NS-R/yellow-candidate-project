@@ -34,3 +34,5 @@ services:
     build: './express'
     ports:
       - "3000:3000"
+    environment:
+      VITE_API_KEY: $VITE_API_KEY

@@ -15,7 +15,6 @@ test.beforeAll(async ({ playwright }) => {
 		baseURL: 'http://localhost:5173',
 		extraHTTPHeaders: {
 			'Content-Type': 'application/json'
-			// TODO API key
 		}
 	});
 });
