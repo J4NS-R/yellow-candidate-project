@@ -30,9 +30,5 @@ export function sendWebsocketMessage(clientId, body) {
 		return;
 	}
 
-	if (typeof body === 'object') {
-		body = JSON.stringify(body);
-	}
-
 	connectedClients.get(clientId)(body);
 }
