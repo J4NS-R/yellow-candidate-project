@@ -1,5 +1,6 @@
 <script>
 	import { Button, Input, Label } from 'flowbite-svelte';
+	import { browser } from '$app/environment';
 
 	/** @type {import('../types').SimpleFormProps} */
 	export let props;
@@ -24,13 +25,14 @@
 <form method="POST" action={props.postPath} bind:this={form}>
 	{#each formFields as field}
 		<div class="mb-4" class:hide={!!field.hidden}>
-			<Label class="block">{field.label}</Label>
-			<Input placeholder={field.placeholder} bind:value={field.value} />
+			<Label class="block">{field.label}
+				<Input placeholder={field.placeholder} bind:value={field.value} />
+			</Label>
 		</div>
 	{/each}
 
 	<div class="">
-		<Button on:click={onSubmit}>{props.buttonText}</Button>
+		<Button on:click={onSubmit} disabled={!browser}>{props.buttonText}</Button>
 	</div>
 	<!-- flowbite bug -->
 	<div class="bg-primary-700" style="display: none;" />

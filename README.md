@@ -25,6 +25,12 @@ pnpm run drizzle-generate
 # Migration happens at runtime
 ```
 
+### Run playwright tests locally
+
+```sh
+npx playwright test --ui
+```
+
 ## Future scope
 
 - cookie security: domain, JWT signing

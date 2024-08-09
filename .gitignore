@@ -25,3 +25,9 @@ vite.config.ts.timestamp-*
 
 # Test containers
 src/test/pgdata
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
