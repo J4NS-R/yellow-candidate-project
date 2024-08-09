@@ -21,8 +21,11 @@ jobs:
         run: |
           cp .env.example .env.local
           tests/docker/start_testcontainers.sh
+
       - name: Run Playwright tests
         run: pnpm exec playwright test
+
+      # Teardown
       - name: Shutdown test containers
         run: docker compose down
         working-directory: tests/docker

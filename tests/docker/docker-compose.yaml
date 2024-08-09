@@ -29,3 +29,8 @@ services:
       WIREMOCK_OPTIONS: >
         --port 8080
         --max-request-journal-entries 20
+
+  express:
+    build: './express'
+    ports:
+      - "3000:3000"

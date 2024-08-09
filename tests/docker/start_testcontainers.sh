@@ -15,6 +15,9 @@ fi
 # Load env
 export $(cat .env.local | xargs)
 
-cd tests/docker
+# Copy server-wrapper resources
+cp -R server-wrapper tests/docker/express/
 
+# Run!
+cd tests/docker
 docker compose up -d --wait

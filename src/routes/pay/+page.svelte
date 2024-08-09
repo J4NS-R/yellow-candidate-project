@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { env } from '$env/dynamic/public';
 	import { getAmount } from '$lib/common';
+	import { browser } from '$app/environment';
 
 	const log = new Logger('/pay.client');
 
@@ -76,7 +77,7 @@
 		<p>Outstanding amount: R{getAmount(data.phoneSale)}</p>
 	</Alert>
 	<div class="mt-6">
-		<Button on:click={startPayment}>Pay Now</Button>
+		<Button on:click={startPayment} disabled={!browser}>Pay Now</Button>
 	</div>
 {/if}
 
@@ -84,7 +85,6 @@
 	<Alert color="gray" class="bg-gray-200">
 		<Spinner slot="icon" class="fill-yellow-400 animate-spin" color="yellow" size={8} />
 		<p class="ml-3">Processing payment</p>
-		<!-- TODO loading -->
 	</Alert>
 	<div class="mt-6">
 		<Button on:click={() => state.set({paymentStatus: 'unstarted'})}>Cancel</Button>
@@ -107,8 +107,6 @@
 		<p>Payment Approved: R{getAmount(data.phoneSale)}</p>
 	</Alert>
 {/if}
-
-<!-- TODO Submit Payment Button; Loading Icon -->
 
 <div class="mt-6">
 	<Button href="/">Home</Button>

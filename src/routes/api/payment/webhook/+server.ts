@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 import { paymentsTable } from '$lib/server/schema';
 import { Logger } from '$lib/logging';
 
-const log = new Logger('/api/payment/webook.server');
+const log = new Logger('/api/payment/webhook.server');
 
 export async function POST(req) {
 	const body: TelcoPaymentResponse = await req.request.json();

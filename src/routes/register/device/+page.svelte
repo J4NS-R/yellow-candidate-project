@@ -3,6 +3,7 @@
 	import SimpleForm from '$lib/client/simple-form.svelte';
 	import { CheckCircleSolid } from 'flowbite-svelte-icons';
 	import { getAmount } from '$lib/common';
+	import { browser } from '$app/environment';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -45,6 +46,6 @@
 <div class="mt-12">
 	<Button href="/">Home</Button>
 	{#if pageData?.registered}
-		<Button href="/pay">Pay Back</Button>
+		<Button href="/pay" disabled={!browser}>Pay Back</Button>
 	{/if}
 </div>

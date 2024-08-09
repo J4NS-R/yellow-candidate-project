@@ -9,6 +9,7 @@ export function load(ev: PageServerLoadEvent) {
 		log.debug('Clearing cookie.');
 		ev.cookies.delete('registered', { path: '/' });
 	} else if (ev.cookies.get('registered')) {
+		log.debug('Customer already registered. Redirecting.');
 		redirect(302, '/register/customer');
 	}
 }

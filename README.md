@@ -11,11 +11,6 @@ tests/docker/start_testcontainers.sh
 pnpm install
 # Run main Svelte App
 pnpm run dev
-
-# Run express server wrapper
-pnpm run build  # requires built svelte app
-export $(cat .env.local | xargs)  # requires env vars
-node server-wrapper
 ```
 
 Updating the DB schema:
@@ -37,7 +32,7 @@ npx playwright test --ui
 - Custom db indexes, to speed up lookups.
 - DB partitioning for cleaning
 - Assuming currency=ZAR
-- Login/session system; Pull phone sale data from server by customerId.
+- Login/session system
 - Security on /webhook/payment-status endpoint
 - Handle websocket client termination (payment approved after client disconnects)
 - Handle malformed messages in websocket

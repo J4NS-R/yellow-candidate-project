@@ -24,7 +24,8 @@ vite.config.ts.timestamp-*
 .idea/
 
 # Test containers
-src/test/pgdata
+tests/docker/express/server-wrapper
+tests/docker/pgdata
 
 # Playwright
 /test-results/

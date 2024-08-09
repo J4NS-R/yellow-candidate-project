@@ -1,5 +1,6 @@
 <script>
 	import { Alert, Button } from 'flowbite-svelte';
+	import { browser } from '$app/environment';
 
 	/** @type {import('./$types').ActionData} */
 	export let form;
@@ -24,6 +25,6 @@
 <div class="mt-6 rounded-full">
 	<Button href="/?signout=true" pill>Sign Out</Button>
 	{#if pageData?.approved}
-		<Button href="/register/device" pill>Register Device</Button>
+		<Button href="/register/device" pill disabled={!browser}>Register Device</Button>
 	{/if}
 </div>
