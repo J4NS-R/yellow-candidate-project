@@ -1,0 +1,29 @@
+# @name Manual Websocket Event
+POST localhost:3000/websocket/3
+Content-Type: application/json
+X-API-KEY: api-key
+
+{
+  "phoneSaleId": 3,
+  "paymentStatus": "approved"
+}
+
+###
+# @name Wiremock test
+POST localhost:8080/payment
+Content-Type: application/json
+
+{
+  "idOrPassport": "123",
+  "amountMinor": 5000
+}
+
+###
+# @name Telco webhook
+POST localhost:5173/api/payment/webhook
+Content-Type: application/json
+
+{
+  "paymentId": "6e5cbb4e-c0db-4670-a63f-2fc29dabbb94",
+  "paymentStatus": "approved"
+}

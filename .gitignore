@@ -22,3 +22,13 @@ vite.config.ts.timestamp-*
 
 # IDE's
 .idea/
+
+# Test containers
+tests/docker/express/server-wrapper
+tests/docker/pgdata
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

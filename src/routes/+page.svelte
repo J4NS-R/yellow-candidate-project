@@ -1,2 +1,24 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+	import SimpleForm from '$lib/client/simple-form.svelte';
+
+	// Prep form fields
+	/** @type {import('$lib/types').SimpleFormProps} */
+	const formConfig = {
+		fields: [
+			{ label: 'Full Name' },
+			{ label: 'ID or Passport number' },
+			{ label: 'Date of Birth', placeholder: 'YYYY-MM-DD' },
+			{ label: 'Phone number' }
+		],
+		postPath: '/register/customer',
+		buttonText: 'Register'
+	};
+</script>
+
+<svelte:head>
+	<title>Yellow Mobile</title>
+</svelte:head>
+
+<h1 class="text-3xl mb-4">Yellow Mobile</h1>
+
+<SimpleForm props={formConfig} />

@@ -1,0 +1,34 @@
+{
+  "mappings": [
+    {
+      "id": "8dd11dfd-81d1-48c7-81f1-2dd758736322",
+      "name": "payment",
+      "request": {
+        "url": "/payment",
+        "method": "POST",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.idOrPassport"
+          },
+          {
+            "matchesJsonPath": "$.amountMinor"
+          }
+        ]
+      },
+      "response": {
+        "status": 202,
+        "body": "{\n  \"paymentStatus\": \"processing\",\n  \"paymentId\": \"{{randomValue type='UUID'}}\"\n}",
+        "headers": {},
+        "transformers": [
+          "response-template"
+        ]
+      },
+      "uuid": "8dd11dfd-81d1-48c7-81f1-2dd758736322",
+      "persistent": true,
+      "priority": 5
+    }
+  ],
+  "meta": {
+    "total": 1
+  }
+}
