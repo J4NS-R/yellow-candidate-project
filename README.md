@@ -1,5 +1,41 @@
 # Yellow Candidate Project
 
+## Business Logic
+
+- Customer registers with their personal details.
+- Backend approves/denies based on age
+- If approved:
+    - Customer purchases device and submits details and amount and IMEI
+    - Customer can later pay back the full amount via Telco integration
+    - Customer cannot purchase more devices
+- Else if denied:
+    - Disallow purchase, and paying back.
+    - Customer is allowed to attempt registration again.
+
+## Payment flow
+
+To prevent continuous polling, the backend uses a websocket proxy (ExpressJS server) to communicate payment status
+updates to the client instantly and asynchronously.
+
+```mermaid
+sequenceDiagram
+    participant client as Client
+    participant ws as Websocket Proxy
+    participant backend as Backend
+    participant telco as Telco
+    client ->> ws: Connect
+    client ->> backend: Init payment
+    backend ->> telco: Payment Auth
+    telco -->> backend: 202
+    backend -->> client: 202
+    telco ->> telco: Process payment
+    telco ->> backend: Payment Approval
+    backend -->> telco: 200
+    backend ->> ws: Payment Approval
+    ws -->> backend: 202
+    ws ->> client: Payment Approval
+```
+
 ## Development
 
 ```sh
