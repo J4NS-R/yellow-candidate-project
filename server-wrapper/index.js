@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.post('/websocket/:id', async (req, res) => {
 	if (req.headers['x-api-key'] !== process.env.VITE_API_KEY) {
-		console.log('Rejecting websocket request because its API key is wrong.');
+		console.log('ws-proxy: Rejecting websocket request because its API key is wrong.');
 		res.status(403).send('Bad API key!');
 		return;
 	}

@@ -5,7 +5,7 @@ const connectedClients = new Map();
 
 function newCallback(socket) {
 	return (payload) => {
-		console.debug(`Sending payload downstream: ${payload}`);
+		console.debug(`ws-proxy: Sending payload downstream: ${payload}`);
 		socket.send(payload);
 	};
 }
@@ -13,20 +13,20 @@ function newCallback(socket) {
 export const wsServer = new WebSocketServer({ noServer: true });
 
 wsServer.on('connection', socket => {
-	console.log('ws client connected.');
+	console.log('ws-proxy: ws client connected.');
 	socket.on('message', message => {
-		console.log('Received message: ' + message);
+		console.log('ws-proxy: Received message: ' + message);
 		/** @type {{phoneSaleId: number}} */
 		const parsed = JSON.parse(message);
 
 		connectedClients.set(parsed.phoneSaleId, newCallback(socket, parsed.phoneSaleId));
-		console.log(`Connection registered with id=${parsed.phoneSaleId}`);
+		console.log(`ws-proxy: Connection registered with id=${parsed.phoneSaleId}`);
 	});
 });
 
 export function sendWebsocketMessage(clientId, body) {
 	if (!connectedClients.has(clientId)) {
-		console.warn(`Cannot execute status callback because clientId ${clientId} is not registered.`);
+		console.warn(`ws-proxy: Cannot execute status callback because clientId ${clientId} is not registered.`);
 		return;
 	}
 

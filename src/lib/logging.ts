@@ -4,7 +4,7 @@ export class Logger {
 	private readonly prefix: string;
 
 	public constructor(prefix: string) {
-		this.prefix = prefix;
+		this.prefix = prefix + ':';
 	}
 
 	public info(message: any) {
