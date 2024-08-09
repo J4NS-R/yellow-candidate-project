@@ -1,7 +1,7 @@
 name: Release image
 on:
   workflow_run:
-    workflows: [ "Playwright Tests" ]
+    workflows: [ "playwright.yml" ]
     #    branches: [main]   # TODO
     types:
       - completed
