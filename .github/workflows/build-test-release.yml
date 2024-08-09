@@ -68,6 +68,6 @@ jobs:
           version=$(cat package.json | jq -r ".version")
           echo "version=$version" >> $GITHUB_OUTPUT
       - name: Build image
-        run: docker build -t ghcr.io/J4NS-R/yellow-candidate-project:${{ steps.version.outputs.version }} .
+        run: docker build -t ghcr.io/j4ns-r/yellow-candidate-project:${{ steps.version.outputs.version }} .
       - name: Push image
-        run: docker push ghcr.io/J4NS-R/yellow-candidate-project:${{ steps.version.outputs.version }}
+        run: docker push ghcr.io/j4ns-r/yellow-candidate-project:${{ steps.version.outputs.version }}
