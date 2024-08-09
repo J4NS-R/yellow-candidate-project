@@ -19,7 +19,7 @@ app.post('/websocket/:id', async (req, res) => {
 		return;
 	}
 	res.status(202).send();
-	sendWebsocketMessage(parseInt(req.params.id), req.body.toString());
+	sendWebsocketMessage(parseInt(req.params.id), req.body.contents.toString());
 });
 
 // Setup svelte server
