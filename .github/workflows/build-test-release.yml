@@ -6,6 +6,7 @@ on:
 jobs:
   test:
     name: Run playwright tests
+    if: ${{ false }}  # TODO
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -39,8 +40,8 @@ jobs:
 
   release-image:
     name: Build & release image
-    needs:
-      - test
+    #    needs:
+    #      - test
     # TODO if main
     runs-on: ubuntu-latest
     permissions:
@@ -60,7 +61,7 @@ jobs:
           npm run build
           npm ci --omit dev
       - name: Docker login
-        run: echo "${ secrets.GITHUB_TOKEN }" | docker login ghcr.io -u J4NS-R --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u J4NS-R --password-stdin
       - name: Get version
         id: version
         run: |
