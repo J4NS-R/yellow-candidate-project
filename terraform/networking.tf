@@ -16,10 +16,17 @@ resource "aws_db_subnet_group" "db" {
 resource "aws_security_group" "db" {
   name = "jans-candidate-proj-db"
   ingress {
+    description = "Ingress from the subnet"
     cidr_blocks = [aws_subnet.main.cidr_block]
+    from_port   = local.pg_port
     to_port     = local.pg_port
+    protocol    = "TCP"
   }
   egress {
+    description = "Egress to the subnet"
     cidr_blocks = [aws_subnet.main.cidr_block]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # which means all
   }
 }
