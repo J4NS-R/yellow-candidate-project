@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:12
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: $VITE_PG_PASS
       POSTGRES_USER: $VITE_PG_USER
@@ -25,7 +25,7 @@ services:
         --max-request-journal-entries 20
 
   proj:
-    image: ghcr.io/j4ns-r/yellow-candidate-project:0.0.1
+    image: ghcr.io/j4ns-r/yellow-candidate-project:1.0.1
     depends_on:
       postgres:
         condition: service_healthy
