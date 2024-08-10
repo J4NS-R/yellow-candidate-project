@@ -13,17 +13,19 @@ resource "aws_internet_gateway" "igw" {
 
 # https://nikhilpurwant.com/post/tech-vpc-helper/vpc-helper
 resource "aws_subnet" "euw1a" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.0.0/27"
-  availability_zone = "eu-west-1a"
+  vpc_id                                      = aws_vpc.main.id
+  cidr_block                                  = "10.0.0.0/27"
+  availability_zone                           = "eu-west-1a"
+  enable_resource_name_dns_a_record_on_launch = true
   tags = {
     Name = "jans-candidate-proj-euw1a"
   }
 }
 resource "aws_subnet" "euw1b" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.0.32/27"
-  availability_zone = "eu-west-1b"
+  vpc_id                                      = aws_vpc.main.id
+  cidr_block                                  = "10.0.0.32/27"
+  availability_zone                           = "eu-west-1b"
+  enable_resource_name_dns_a_record_on_launch = true
   tags = {
     Name = "jans-candidate-proj-euw1b"
   }
@@ -114,8 +116,8 @@ resource "aws_security_group" "vpc" {
     protocol    = "-1" # all
   }
   egress {
-    description = "Egress to the vpc"
-    cidr_blocks = [aws_subnet.euw1a.cidr_block, aws_subnet.euw1b.cidr_block]
+    description = "Egress to the world"
+    cidr_blocks = ["0.0.0.0/0"]
     from_port   = 0
     to_port     = 0
     protocol    = "-1" # which means all
