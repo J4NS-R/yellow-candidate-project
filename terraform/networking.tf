@@ -55,8 +55,8 @@ resource "aws_security_group" "db" {
   }
 }
 
-resource "aws_security_group" "node_app" {
-  name   = "${local.proj_name}-node-app"
+resource "aws_security_group" "node_app_ingress" {
+  name   = "${local.proj_name}-node-app-ingress"
   vpc_id = aws_vpc.main.id
   ingress {
     description = "WWW"
@@ -71,5 +71,27 @@ resource "aws_security_group" "node_app" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1" # all
+  }
+}
+
+resource "aws_security_group" "vpc" {
+  vpc_id = aws_vpc.main.id
+  name   = "${local.proj_name}-vpc-friendly"
+  ingress {
+    description = "Ingress from the vpc"
+    cidr_blocks = [aws_subnet.euw1a.cidr_block, aws_subnet.euw1b.cidr_block]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # all
+  }
+  egress {
+    description = "Egress to the vpc"
+    cidr_blocks = [aws_subnet.euw1a.cidr_block, aws_subnet.euw1b.cidr_block]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # which means all
+  }
+  tags = {
+    Name = "${local.proj_name}-vpc-friendly"
   }
 }

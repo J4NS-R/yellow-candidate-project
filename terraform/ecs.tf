@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "cluster" {
-  name = local.proj_name
+  name = local.cluster_name
 }
 
 data "template_file" "node_app_defn" {
@@ -17,6 +17,7 @@ data "template_file" "node_app_defn" {
     api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}/api-key"
   }
 }
+# https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecs/register-task-definition.html
 resource "aws_ecs_task_definition" "node" {
   container_definitions    = data.template_file.node_app_defn.rendered
   requires_compatibilities = ["EC2"]
@@ -32,11 +33,20 @@ resource "aws_ecs_service" "node" {
   task_definition = aws_ecs_task_definition.node.arn
   desired_count   = 1
   cluster         = aws_ecs_cluster.cluster.arn
+  network_configuration {
+    subnets         = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
+    security_groups = [aws_security_group.vpc.id]
+  }
   load_balancer {
     target_group_arn = aws_lb_target_group.node_app.arn
     container_name   = "node"
     container_port   = 3000
   }
+  capacity_provider_strategy {
+    capacity_provider = aws_ecs_capacity_provider.cluster.name
+    weight            = 100
+  }
+  depends_on = [aws_autoscaling_group.asg]
 }
 
 # Load balancer
@@ -46,6 +56,7 @@ resource "aws_lb" "node_ingress" {
   load_balancer_type = "application"
   subnets            = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
   depends_on         = [aws_internet_gateway.igw]
+  security_groups    = [aws_security_group.node_app_ingress.id]
 }
 resource "aws_lb_target_group" "node_app" {
   name     = "${local.proj_name}-tg"

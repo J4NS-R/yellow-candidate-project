@@ -35,4 +35,5 @@ locals {
   terrasecrets = jsondecode(data.aws_secretsmanager_secret_version.terrasecrets_latest.secret_string)
   pg_port      = 5432
   proj_name    = "jans-candidate-proj"
+  cluster_name = local.proj_name
 }
