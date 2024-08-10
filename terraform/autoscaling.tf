@@ -66,7 +66,7 @@ resource "aws_launch_template" "ecs" {
   block_device_mappings {
     device_name = "/dev/xvda"
     ebs {
-      volume_size = 20
+      volume_size = 30 # minimum
       volume_type = "gp3"
     }
   }
