@@ -1,4 +1,5 @@
 resource "aws_db_instance" "pg" {
+  identifier     = local.proj_name
   instance_class = "db.t3.micro"
   engine         = "postgres"
   # aws rds describe-db-engine-versions --engine postgres --output json | jq ".DBEngineVersions[] | .EngineVersion"
@@ -15,6 +16,6 @@ resource "aws_db_instance" "pg" {
   multi_az               = false
   publicly_accessible    = false
   tags = {
-    Name = "jans-candidate-proj"
+    Name = local.proj_name
   }
 }

@@ -1,7 +1,7 @@
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/24"
   tags = {
-    Name = "jans-candidate-proj"
+    Name = local.proj_name
   }
 }
 # https://nikhilpurwant.com/post/tech-vpc-helper/vpc-helper
@@ -42,5 +42,27 @@ resource "aws_security_group" "db" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1" # which means all
+  }
+  tags = {
+    Name = "jans-candidate-proj-db"
+  }
+}
+
+resource "aws_security_group" "node_app" {
+  name   = "${local.proj_name}-node-app"
+  vpc_id = aws_vpc.main.id
+  ingress {
+    description = "WWW"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80 # TODO 443
+    to_port     = 80
+    protocol    = "TCP"
+  }
+  egress {
+    description = "Out to the world"
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # all
   }
 }
