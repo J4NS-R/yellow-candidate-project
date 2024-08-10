@@ -57,7 +57,7 @@ data "template_file" "ecssh" {
 resource "aws_launch_template" "ecs" {
   name_prefix            = "ecs-template"
   instance_type          = "t3.micro"
-  image_id               = "ami-062747a55c653bb1e" # Ubuntu 22.04 ECS-Optimized
+  image_id               = "ami-0913391b29f78da7c" # ECS-Optimized
   key_name               = "ec2ecsglog"
   vpc_security_group_ids = [aws_security_group.vpc.id]
   iam_instance_profile {
