@@ -17,7 +17,7 @@ terraform {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 provider "aws" {
-  region = "eu-west-1"
+  region = local.aws_region
   default_tags {
     tags = {
       Project = "jans-candidate-proj"
@@ -32,6 +32,7 @@ data "aws_secretsmanager_secret_version" "terrasecrets_latest" {
   secret_id = data.aws_secretsmanager_secret.terrasecrets.id
 }
 locals {
+  aws_region   = "eu-west-1"
   terrasecrets = jsondecode(data.aws_secretsmanager_secret_version.terrasecrets_latest.secret_string)
   pg_port      = 5432
   proj_name    = "jans-candidate-proj"

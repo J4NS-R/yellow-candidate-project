@@ -13,8 +13,10 @@ data "template_file" "node_app_defn" {
     max_age              = 60
     upstream_payment_url = "https://example.org/"
     origin               = "http://${aws_lb.node_ingress.dns_name}"
-    pg_pass_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}/db-password"
-    api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}/api-key"
+    pg_pass_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:db-password"
+    api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:api-key"
+    log_group            = aws_cloudwatch_log_group.ecs_log_group.name
+    aws_region           = local.aws_region
   }
 }
 # https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecs/register-task-definition.html

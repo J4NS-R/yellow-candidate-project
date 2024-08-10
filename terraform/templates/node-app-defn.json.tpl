@@ -48,6 +48,14 @@
         "name": "VITE_API_KEY",
         "valueFrom": "${api_key_ref}"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group}",
+        "awslogs-region": "${aws_region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    }
   }
 ]
