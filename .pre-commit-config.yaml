@@ -5,3 +5,7 @@ repos:
         name: tofu fmt
         entry: sh -c "cd terraform && tofu fmt -check"
         language: system
+      - id: tofu-validate
+        name: tofu validate
+        entry: sh -c "cd terraform && tofu validate"
+        language: system

@@ -17,7 +17,7 @@ resource "aws_security_group" "db" {
   name = "jans-candidate-proj-db"
   ingress {
     cidr_blocks = [aws_subnet.main.cidr_block]
-    to_port     = aws_db_instance.pg.port
+    to_port     = local.pg_port
   }
   egress {
     cidr_blocks = [aws_subnet.main.cidr_block]

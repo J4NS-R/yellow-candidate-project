@@ -32,4 +32,5 @@ data "aws_secretsmanager_secret_version" "terrasecrets_latest" {
 }
 locals {
   terrasecrets = jsondecode(data.aws_secretsmanager_secret_version.terrasecrets_latest.secret_string)
+  pg_port      = 5432
 }
