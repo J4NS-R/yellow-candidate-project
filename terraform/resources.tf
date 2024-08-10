@@ -10,9 +10,10 @@ resource "aws_db_instance" "pg" {
   engine = "postgres"
   # aws rds describe-db-engine-versions --engine postgres --output json | jq ".DBEngineVersions[] | .EngineVersion"
   engine_version      = "16.4"
+  allocated_storage = 10
   db_name             = "yellow"
-  username            = local.terrasecrets.db-username
-  password            = local.terrasecrets.db-password
+  username          = local.terrasecrets['db-username']
+  password          = local.terrasecrets['db-password']
   apply_immediately   = true
   skip_final_snapshot = true
 }
