@@ -20,33 +20,38 @@ data "template_file" "node_app_defn" {
 # https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ecs/register-task-definition.html
 resource "aws_ecs_task_definition" "node" {
   container_definitions    = data.template_file.node_app_defn.rendered
-  requires_compatibilities = ["EC2"]
+  requires_compatibilities = ["FARGATE"]
   family                   = "service"
+  network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.node_app.arn
+  cpu                      = "1024"
+  memory                   = "1024"
   tags = {
     Name = "${local.proj_name}-node-app"
   }
 }
 
-resource "aws_ecs_service" "node" {
+resource "aws_ecs_service" "node_app" {
   name            = local.proj_name
   task_definition = aws_ecs_task_definition.node.arn
   desired_count   = 1
   cluster         = aws_ecs_cluster.cluster.arn
+  launch_type     = "FARGATE"
   network_configuration {
-    subnets         = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
-    security_groups = [aws_security_group.vpc.id]
+    subnets          = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
+    security_groups  = [aws_security_group.vpc.id]
+    assign_public_ip = false
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.node_app.arn
     container_name   = "node"
     container_port   = 3000
   }
-  capacity_provider_strategy {
-    capacity_provider = aws_ecs_capacity_provider.cluster.name
-    weight            = 100
-  }
-  depends_on = [aws_autoscaling_group.asg]
+  #   capacity_provider_strategy {
+  #     capacity_provider = aws_ecs_capacity_provider.cluster.name
+  #     weight            = 100
+  #   }
+  depends_on = [aws_lb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
 }
 
 # Load balancer
