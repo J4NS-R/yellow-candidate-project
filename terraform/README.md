@@ -10,3 +10,8 @@
 ## Run
 
 See [GH Action](../.github/workflows/terraform.yaml)
+
+## Good to know
+
+- Manually created resources are tagged with `Created-By: Jans`
+- Terraform-created resources are tagged with `Project: jans-candidate-proj`

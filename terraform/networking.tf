@@ -9,11 +9,17 @@ resource "aws_subnet" "euw1a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.0.0/27"
   availability_zone = "eu-west-1a"
+  tags = {
+    Name = "jans-candidate-proj-euw1a"
+  }
 }
 resource "aws_subnet" "euw1b" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.0.32/27"
   availability_zone = "eu-west-1b"
+  tags = {
+    Name = "jans-candidate-proj-euw1b"
+  }
 }
 resource "aws_db_subnet_group" "db" {
   subnet_ids = [aws_subnet.euw1a.id, aws_subnet.euw1b.id]

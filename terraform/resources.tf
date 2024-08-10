@@ -13,6 +13,7 @@ resource "aws_db_instance" "pg" {
   vpc_security_group_ids = [aws_security_group.db.id]
   port                   = local.pg_port
   multi_az               = false
+  publicly_accessible    = false
   tags = {
     Name = "jans-candidate-proj"
   }
