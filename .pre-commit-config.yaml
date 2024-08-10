@@ -1,0 +1,7 @@
+repos:
+  - repo: local
+    hooks:
+      - id: tofu-fmt
+        name: tofu fmt
+        entry: sh -c "cd terraform && tofu fmt -check"
+        language: system
