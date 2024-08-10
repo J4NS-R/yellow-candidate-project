@@ -51,7 +51,7 @@ resource "aws_ecs_service" "node_app" {
     container_name   = "node"
     container_port   = 3000
   }
-  depends_on = [aws_lb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
+  depends_on = [aws_alb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
 }
 
 # Load balancer
@@ -80,10 +80,11 @@ resource "aws_alb_target_group" "node_app" {
     unhealthy_threshold = "2"
   }
 }
-resource "aws_lb_listener" "node_app" {
+resource "aws_alb_listener" "node_app" {
   load_balancer_arn = aws_alb.node_ingress.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate.yellow.arn
 
   default_action {
     type             = "forward"

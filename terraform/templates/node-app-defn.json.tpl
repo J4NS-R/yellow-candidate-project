@@ -37,6 +37,14 @@
       {
         "name": "ORIGIN",
         "value": "${origin}"
+      },
+      {
+        "name": "PROTOCOL_HEADER",
+        "value": "x-forwarded-proto"
+      },
+      {
+        "name": "PORT_HEADER",
+        "value": "x-forwarded-port"
       }
     ],
     "secrets": [
@@ -56,12 +64,6 @@
         "awslogs-region": "${aws_region}",
         "awslogs-stream-prefix": "ecs"
       }
-    },
-    "healthCheck": {
-      "command": [
-        "CMD-SHELL",
-        "curl -f http://localhost:3000/ || exit 1"
-      ]
     }
   }
 ]

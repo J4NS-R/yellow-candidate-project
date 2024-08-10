@@ -48,7 +48,7 @@ resource "aws_ecs_service" "telco" {
     container_name   = "wiremock"
     container_port   = 8080
   }
-  depends_on = [aws_lb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
+  depends_on = [aws_alb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
 }
 
 # Load balancer
@@ -67,10 +67,11 @@ resource "aws_alb_target_group" "telco" {
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
 }
-resource "aws_lb_listener" "telco" {
+resource "aws_alb_listener" "telco" {
   load_balancer_arn = aws_alb.telco_ingress.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate.yellow.arn
 
   default_action {
     type             = "forward"
