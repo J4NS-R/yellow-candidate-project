@@ -55,13 +55,25 @@ resource "aws_ecs_service" "node_app" {
 }
 
 # Load balancer
+resource "aws_eip" "node_ingress_alb" {
+  count      = local.az_count
+  depends_on = [aws_internet_gateway.gw]
+}
 resource "aws_alb" "node_ingress" {
   name               = "${local.proj_name}-ingress"
   internal           = false
   load_balancer_type = "application"
-  subnets            = aws_subnet.public.*.id
-  depends_on         = [aws_internet_gateway.gw]
-  security_groups    = [aws_security_group.node_app_ingress.id]
+  #subnets            = aws_subnet.public.*.id
+  subnet_mapping {
+    subnet_id     = aws_subnet.public.0.id
+    allocation_id = aws_eip.node_ingress_alb.0.id
+  }
+  subnet_mapping {
+    subnet_id     = aws_subnet.public.1.id
+    allocation_id = aws_eip.node_ingress_alb.1.id
+  }
+  depends_on      = [aws_internet_gateway.gw]
+  security_groups = [aws_security_group.node_app_ingress.id]
 }
 resource "aws_alb_target_group" "node_app" {
   name        = "${local.proj_name}-tg"
@@ -84,6 +96,7 @@ resource "aws_alb_listener" "node_app" {
   load_balancer_arn = aws_alb.node_ingress.arn
   port              = "443"
   protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016–08"
   certificate_arn   = aws_acm_certificate.yellow.arn
 
   default_action {

@@ -5,9 +5,9 @@ resource "aws_route53_zone" "yellow" {
 resource "aws_route53_record" "root" {
   zone_id = aws_route53_zone.yellow.id
   name    = aws_route53_zone.yellow.name
-  type    = "CNAME"
+  type    = "A"
   ttl     = 300
-  records = [aws_alb.node_ingress.dns_name]
+  records = aws_eip.node_ingress_alb.*.public_ip
 }
 
 resource "aws_route53_record" "telco" {
@@ -24,11 +24,20 @@ resource "aws_acm_certificate" "yellow" {
   subject_alternative_names = [aws_route53_record.telco.name]
   validation_method         = "DNS"
 
-  validation_option {
-    domain_name       = aws_route53_zone.yellow.name
-    validation_domain = aws_route53_zone.yellow.name
-  }
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_route53_record" "validation" {
+  for_each = aws_acm_certificate.yellow.domain_validation_options
+  zone_id  = aws_route53_zone.yellow.id
+  name     = each.value.resource_record_name
+  type     = each.value.resource_record_type
+  records  = [each.value.resource_record_value]
+  ttl      = 60
+}
+resource "aws_acm_certificate_validation" "validation" {
+  certificate_arn         = aws_acm_certificate.yellow.arn
+  validation_record_fqdns = aws_route53_record.validation.*.fqdn
 }
