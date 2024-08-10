@@ -6,7 +6,6 @@ on:
 jobs:
   test:
     name: Run playwright tests
-    if: ${{ false }}  # TODO
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -40,9 +39,9 @@ jobs:
 
   release-image:
     name: Build & release image
-    #    needs:
-    #      - test
-    # TODO if main
+    needs:
+      - test
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       packages: write

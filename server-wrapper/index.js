@@ -6,20 +6,19 @@ import cors from 'cors';
 import { sendWebsocketMessage, wsServer } from './websocket-manager.js';
 
 const app = express();
-app.use(express.raw());
 
 if (process.env.NODE_ENV !== 'production') {
 	app.use(cors());
 }
 // This endpoint allows the svelte server to send websocket messages to the client
-app.post('/websocket/:id', async (req, res) => {
+app.post('/websocket/:id', express.json(), async (req, res) => {
 	if (req.headers['x-api-key'] !== process.env.VITE_API_KEY) {
 		console.log('ws-proxy: Rejecting websocket request because its API key is wrong.');
 		res.status(403).send('Bad API key!');
 		return;
 	}
 	res.status(202).send();
-	sendWebsocketMessage(parseInt(req.params.id), req.body.contents.toString());
+	sendWebsocketMessage(parseInt(req.params.id), JSON.stringify(req.body));
 });
 
 // Setup svelte server

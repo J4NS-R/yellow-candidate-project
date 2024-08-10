@@ -22,8 +22,9 @@ Content-Type: application/json
 # @name Telco webhook
 POST localhost:5173/api/payment/webhook
 Content-Type: application/json
+Origin: http://localhost:5173
 
 {
-  "paymentId": "6e5cbb4e-c0db-4670-a63f-2fc29dabbb94",
+  "paymentId": "83da26a1-10ca-4440-9b76-9e99966eb98b",
   "paymentStatus": "approved"
 }
