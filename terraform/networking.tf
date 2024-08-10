@@ -4,6 +4,13 @@ resource "aws_vpc" "main" {
     Name = local.proj_name
   }
 }
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = local.proj_name
+  }
+}
+
 # https://nikhilpurwant.com/post/tech-vpc-helper/vpc-helper
 resource "aws_subnet" "euw1a" {
   vpc_id            = aws_vpc.main.id
