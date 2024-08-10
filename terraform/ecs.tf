@@ -20,7 +20,6 @@ data "template_file" "node_app_defn" {
 resource "aws_ecs_task_definition" "node" {
   container_definitions    = data.template_file.node_app_defn.rendered
   requires_compatibilities = ["EC2"]
-  network_mode             = "awsvpc"
   family                   = "service"
   execution_role_arn       = aws_iam_role.node_app.arn
   tags = {
