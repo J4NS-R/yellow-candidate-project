@@ -103,8 +103,8 @@ resource "aws_security_group" "node_app_ingress" {
   ingress {
     description = "WWW"
     cidr_blocks = ["0.0.0.0/0"]
-    from_port   = 80 # TODO 443
-    to_port     = 80
+    from_port   = 443
+    to_port     = 443
     protocol    = "TCP"
   }
   egress {

@@ -69,9 +69,10 @@ resource "aws_alb_target_group" "telco" {
 }
 resource "aws_alb_listener" "telco" {
   load_balancer_arn = aws_alb.telco_ingress.arn
-  port              = "80"
-  protocol          = "HTTP"
-  #certificate_arn   = aws_acm_certificate.yellow.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate.yellow.arn
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 
   default_action {
     type             = "forward"

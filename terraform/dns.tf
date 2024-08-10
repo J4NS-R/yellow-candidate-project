@@ -32,14 +32,6 @@ resource "aws_acm_certificate" "yellow" {
   }
 }
 
-# resource "aws_route53_record" "validation" {
-#   count   = 2
-#   zone_id = aws_route53_zone.yellow.id
-#   name    = element(aws_acm_certificate.yellow.domain_validation_options.*.resource_record_name, count.index)
-#   type    = element(aws_acm_certificate.yellow.domain_validation_options.*.resource_record_type, count.index)
-#   records = [element(aws_acm_certificate.yellow.domain_validation_options.*.resource_record_value, count.index)]
-#   ttl     = 60
-# }
 resource "aws_route53_record" "validation" {
   for_each = {
     for dvo in aws_acm_certificate.yellow.domain_validation_options : dvo.domain_name => {
