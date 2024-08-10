@@ -4,14 +4,15 @@ resource "aws_vpc" "main" {
     Name = "jans-candidate-proj"
   }
 }
+# https://nikhilpurwant.com/post/tech-vpc-helper/vpc-helper
 resource "aws_subnet" "euw1a" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.0.0/25"
+  cidr_block        = "10.0.0.0/27"
   availability_zone = "eu-west-1a"
 }
 resource "aws_subnet" "euw1b" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.0.128/25"
+  cidr_block        = "10.0.0.32/27"
   availability_zone = "eu-west-1b"
 }
 resource "aws_db_subnet_group" "db" {
