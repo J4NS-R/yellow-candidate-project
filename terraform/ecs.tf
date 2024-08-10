@@ -22,6 +22,7 @@ resource "aws_ecs_task_definition" "node" {
   requires_compatibilities = ["EC2"]
   network_mode             = "awsvpc"
   family                   = "service"
+  execution_role_arn       = aws_iam_role.node_app.arn
   tags = {
     Name = "${local.proj_name}-node-app"
   }
@@ -32,7 +33,6 @@ resource "aws_ecs_service" "node" {
   task_definition = aws_ecs_task_definition.node.arn
   desired_count   = 1
   cluster         = aws_ecs_cluster.cluster.arn
-  iam_role        = aws_iam_role.node_app.arn
   load_balancer {
     target_group_arn = aws_lb_target_group.node_app.arn
     container_name   = "node"
