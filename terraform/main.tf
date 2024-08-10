@@ -37,4 +37,5 @@ locals {
   pg_port      = 5432
   proj_name    = "jans-candidate-proj"
   cluster_name = local.proj_name
+  az_count     = 2
 }

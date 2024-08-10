@@ -28,6 +28,35 @@ resource "aws_subnet" "euw1b" {
     Name = "jans-candidate-proj-euw1b"
   }
 }
+locals {
+  subnet_ids = [aws_subnet.euw1a.id, aws_subnet.euw1b.id]
+}
+
+# Create a NAT gateway with an Elastic IP for each private subnet to get internet connectivity
+resource "aws_eip" "gw" {
+  count      = local.az_count
+  domain     = "vpc"
+  depends_on = [aws_internet_gateway.igw]
+}
+resource "aws_nat_gateway" "gw" {
+  count         = local.az_count
+  subnet_id     = element(local.subnet_ids, count.index)
+  allocation_id = element(aws_eip.gw.*.id, count.index)
+}
+resource "aws_route_table" "rt" {
+  count  = local.az_count
+  vpc_id = aws_vpc.main.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = element(aws_nat_gateway.gw.*.id, count.index)
+  }
+}
+resource "aws_route_table_association" "rtassoc" {
+  count          = local.az_count
+  route_table_id = element(aws_route_table.rt.*.id, count.index)
+  subnet_id      = element(local.subnet_ids, count.index)
+}
+
 resource "aws_db_subnet_group" "db" {
   subnet_ids = [aws_subnet.euw1a.id, aws_subnet.euw1b.id]
 }
