@@ -32,7 +32,7 @@ resource "aws_acm_certificate" "yellow" {
 resource "aws_route53_record" "validation" {
   for_each = {
     for index, val in aws_acm_certificate.yellow.domain_validation_options :
-    index => val
+    val.resource_record_name => val
   }
   zone_id = aws_route53_zone.yellow.id
   name    = each.value.resource_record_name
