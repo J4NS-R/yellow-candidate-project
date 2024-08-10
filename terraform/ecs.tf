@@ -6,12 +6,13 @@ data "template_file" "node_app_defn" {
   template = file("./templates/node-app-defn.json.tpl")
 
   vars = {
+    image_tag            = "1.0.1"
     pg_host              = aws_db_instance.pg.address,
     pg_db                = aws_db_instance.pg.db_name,
     pg_user              = aws_db_instance.pg.username,
     min_age              = 18
     max_age              = 60
-    upstream_payment_url = "https://example.org/"
+    upstream_payment_url = "http://${aws_alb.telco_ingress.dns_name}/payment"
     origin               = "http://${aws_alb.node_ingress.dns_name}"
     pg_pass_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:db-password::"
     api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:api-key::"
@@ -50,10 +51,6 @@ resource "aws_ecs_service" "node_app" {
     container_name   = "node"
     container_port   = 3000
   }
-  #   capacity_provider_strategy {
-  #     capacity_provider = aws_ecs_capacity_provider.cluster.name
-  #     weight            = 100
-  #   }
   depends_on = [aws_lb_listener.node_app, aws_iam_policy_attachment.node_app_ecs_exec]
 }
 

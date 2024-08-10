@@ -1,7 +1,7 @@
 [
   {
     "name": "node",
-    "image": "ghcr.io/j4ns-r/yellow-candidate-project:1.0.0",
+    "image": "ghcr.io/j4ns-r/yellow-candidate-project:${image_tag}",
     "essential": true,
     "portMappings": [
       {
@@ -56,6 +56,12 @@
         "awslogs-region": "${aws_region}",
         "awslogs-stream-prefix": "ecs"
       }
+    },
+    "healthCheck": {
+      "command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:3000/ || exit 1"
+      ]
     }
   }
 ]
