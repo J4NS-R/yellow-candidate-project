@@ -15,6 +15,38 @@ resource "aws_autoscaling_group" "asg" {
   }
 }
 
+resource "aws_iam_role" "ecs_ec2" {
+  name               = "ecs-ec2"
+  assume_role_policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
+                ]
+            }
+        }
+    ]
+  }
+  EOF
+}
+resource "aws_iam_policy_attachment" "ecs_ec2" {
+  name       = "${local.proj_name}-ecs-ec2"
+  roles      = [aws_iam_role.ecs_ec2.name]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_ec2" {
+  name = "ecsInstanceRole"
+  role = aws_iam_role.ecs_ec2.name
+}
+
 data "template_file" "ecssh" {
   template = file("./templates/ecs.sh.tpl")
   vars = {
@@ -29,7 +61,7 @@ resource "aws_launch_template" "ecs" {
   key_name               = "ec2ecsglog"
   vpc_security_group_ids = [aws_security_group.vpc.id]
   iam_instance_profile {
-    name = "ecsInstanceRole"
+    name = aws_iam_instance_profile.ecs_ec2.name
   }
   block_device_mappings {
     device_name = "/dev/xvda"
