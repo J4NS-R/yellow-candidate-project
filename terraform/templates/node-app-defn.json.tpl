@@ -2,8 +2,6 @@
   {
     "name": "node",
     "image": "ghcr.io/j4ns-r/yellow-candidate-project:1.0.0",
-    "cpu": 512,
-    "memory": 512,
     "essential": true,
     "portMappings": [
       {

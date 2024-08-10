@@ -24,8 +24,9 @@ resource "aws_ecs_task_definition" "node" {
   family                   = "service"
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.node_app.arn
-  cpu                      = "1024"
-  memory                   = "1024"
+  # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size
+  cpu    = "512"
+  memory = "1024"
   tags = {
     Name = "${local.proj_name}-node-app"
   }
