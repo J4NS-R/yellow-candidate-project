@@ -65,10 +65,21 @@ resource "aws_lb" "node_ingress" {
   security_groups    = [aws_security_group.node_app_ingress.id]
 }
 resource "aws_lb_target_group" "node_app" {
-  name     = "${local.proj_name}-tg"
-  port     = 3000
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  name        = "${local.proj_name}-tg"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip"
+
+  health_check {
+    healthy_threshold   = "2"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200"
+    timeout             = "3"
+    path                = "/"
+    unhealthy_threshold = "2"
+  }
 }
 resource "aws_lb_listener" "node_app" {
   load_balancer_arn = aws_lb.node_ingress.arn
