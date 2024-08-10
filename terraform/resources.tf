@@ -12,6 +12,7 @@ resource "aws_db_instance" "pg" {
   db_subnet_group_name   = aws_db_subnet_group.db.name
   vpc_security_group_ids = [aws_security_group.db.id]
   port                   = local.pg_port
+  multi_az               = false
   tags = {
     Name = "jans-candidate-proj"
   }
