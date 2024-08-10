@@ -12,7 +12,7 @@ data "template_file" "node_app_defn" {
     min_age              = 18
     max_age              = 60
     upstream_payment_url = "https://example.org/"
-    origin               = "http://${aws_lb.node_ingress.dns_name}"
+    origin               = "http://${aws_alb.node_ingress.dns_name}"
     pg_pass_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:db-password::"
     api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:api-key::"
     log_group            = aws_cloudwatch_log_group.ecs_log_group.name
@@ -41,12 +41,12 @@ resource "aws_ecs_service" "node_app" {
   cluster         = aws_ecs_cluster.cluster.arn
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
+    subnets          = aws_subnet.private.*.id
     security_groups  = [aws_security_group.vpc.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
   load_balancer {
-    target_group_arn = aws_lb_target_group.node_app.arn
+    target_group_arn = aws_alb_target_group.node_app.arn
     container_name   = "node"
     container_port   = 3000
   }
@@ -58,15 +58,15 @@ resource "aws_ecs_service" "node_app" {
 }
 
 # Load balancer
-resource "aws_lb" "node_ingress" {
+resource "aws_alb" "node_ingress" {
   name               = "${local.proj_name}-ingress"
   internal           = false
   load_balancer_type = "application"
-  subnets            = [aws_subnet.euw1b.id, aws_subnet.euw1a.id]
-  depends_on         = [aws_internet_gateway.igw]
+  subnets            = aws_subnet.public.*.id
+  depends_on         = [aws_internet_gateway.gw]
   security_groups    = [aws_security_group.node_app_ingress.id]
 }
-resource "aws_lb_target_group" "node_app" {
+resource "aws_alb_target_group" "node_app" {
   name        = "${local.proj_name}-tg"
   port        = 3000
   protocol    = "HTTP"
@@ -84,13 +84,13 @@ resource "aws_lb_target_group" "node_app" {
   }
 }
 resource "aws_lb_listener" "node_app" {
-  load_balancer_arn = aws_lb.node_ingress.arn
+  load_balancer_arn = aws_alb.node_ingress.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.node_app.arn
+    target_group_arn = aws_alb_target_group.node_app.arn
   }
 }
 
