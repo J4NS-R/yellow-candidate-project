@@ -1,0 +1,32 @@
+name: Terraform
+on:
+  push:
+    branches:
+      - "terraform"  # TODO main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: AWS Login
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::334550036524:role/github-actions-jans-candidate-project
+      - name: Setup Tofu
+        uses: opentofu/setup-opentofu@v1.0.3
+      - name: TF Prep
+        working-directory: terraform
+        run: |
+          tofu init
+          tofu validate
+      - name: TF Plan
+        working-directory: terraform
+        run: tofu plan
+#      - name: TF Apply
+#        working-directory: terraform
+#        run: tofu apply -auto-approve
