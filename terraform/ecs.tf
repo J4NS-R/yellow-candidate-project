@@ -12,8 +12,8 @@ data "template_file" "node_app_defn" {
     pg_user              = aws_db_instance.pg.username,
     min_age              = 18
     max_age              = 60
-    upstream_payment_url = "http://${aws_alb.telco_ingress.dns_name}/payment"
-    origin               = "http://${aws_alb.node_ingress.dns_name}"
+    upstream_payment_url = "https://${aws_route53_record.telco.name}/payment"
+    origin               = "https://${aws_route53_record.app.name}"
     pg_pass_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:db-password::"
     api_key_ref          = "${data.aws_secretsmanager_secret.terrasecrets.arn}:api-key::"
     log_group            = aws_cloudwatch_log_group.ecs_log_group.name

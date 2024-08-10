@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "s3" {
-    region = "eu-west-1"
+    region = local.aws_region
     bucket = "yellow-sandbox-s3-terraform-state"
     key    = "yellow-sandbox/jans/candidate-project.json"
     # Required env vars:
