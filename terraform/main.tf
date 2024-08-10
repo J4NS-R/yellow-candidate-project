@@ -23,3 +23,13 @@ provider "aws" {
     }
   }
 }
+
+data "aws_secretsmanager_secret" "terrasecrets" {
+  arn = "arn:aws:secretsmanager:eu-west-1:334550036524:secret:jans-candidate-proj-terrasecrets-3YT8rq"
+}
+data "aws_secretsmanager_secret_version" "terrasecrets_latest" {
+  secret_id = data.aws_secretsmanager_secret.terrasecrets.id
+}
+locals {
+  terrasecrets = jsondecode(data.aws_secretsmanager_secret_version.terrasecrets_latest.secret_string)
+}

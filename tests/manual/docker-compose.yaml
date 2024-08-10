@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:12
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: $VITE_PG_PASS
       POSTGRES_USER: $VITE_PG_USER
