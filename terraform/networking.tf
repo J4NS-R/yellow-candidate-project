@@ -27,7 +27,8 @@ resource "aws_db_subnet_group" "db" {
 
 # Security groups
 resource "aws_security_group" "db" {
-  name = "jans-candidate-proj-db"
+  vpc_id = aws_vpc.main.id
+  name   = "jans-candidate-proj-db"
   ingress {
     description = "Ingress from the vpc"
     cidr_blocks = [aws_subnet.euw1a.cidr_block, aws_subnet.euw1b.cidr_block]
