@@ -3,8 +3,9 @@ resource "aws_db_instance" "pg" {
   instance_class = "db.t3.micro"
   engine         = "postgres"
   # aws rds describe-db-engine-versions --engine postgres --output json | jq ".DBEngineVersions[] | .EngineVersion"
-  engine_version           = "16.4"
-  allocated_storage        = 10
+  engine_version = "16.4"
+  # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#Concepts.Storage.GeneralSSD
+  allocated_storage        = 20
   storage_type             = "gp3"
   delete_automated_backups = true
   backup_retention_period  = 1
