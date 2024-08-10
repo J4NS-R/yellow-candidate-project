@@ -1,6 +1,6 @@
 {
   "name": "yellow-candidate-project-jans",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "author": {
     "name": "Jans Rautenbach"
@@ -26,7 +26,6 @@
     "@types/node": "^22.1.0",
     "@types/ws": "^8.5.12",
     "autoprefixer": "^10.4.19",
-    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.23.1",
     "eslint": "^9.0.0",
@@ -53,6 +52,7 @@
     "drizzle-orm": "^0.32.1",
     "express": "^4.19.2",
     "postgres": "^3.4.4",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "cors": "^2.8.5"
   }
 }

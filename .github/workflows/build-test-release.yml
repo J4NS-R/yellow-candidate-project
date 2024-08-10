@@ -1,0 +1,72 @@
+name: Build, Test, and Release
+on:
+  push:
+    branches:
+      - "**"
+jobs:
+  test:
+    name: Run playwright tests
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install -g pnpm && pnpm install
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      - name: Start test containers
+        run: |
+          cp .env.example .env.local
+          tests/docker/start_testcontainers.sh
+
+      - name: Run Playwright tests
+        run: pnpm exec playwright test
+
+      # Teardown
+      - name: Shutdown test containers
+        run: docker compose down
+        working-directory: tests/docker
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  release-image:
+    name: Build & release image
+    needs:
+      - test
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build node project
+        run: |
+          npm install
+          npm run build
+          npm ci --omit dev
+      - name: Docker login
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u J4NS-R --password-stdin
+      - name: Get version
+        id: version
+        run: |
+          version=$(cat package.json | jq -r ".version")
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Build image
+        run: docker build -t ghcr.io/j4ns-r/yellow-candidate-project:${{ steps.version.outputs.version }} .
+      - name: Push image
+        run: docker push ghcr.io/j4ns-r/yellow-candidate-project:${{ steps.version.outputs.version }}

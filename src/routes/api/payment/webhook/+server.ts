@@ -11,9 +11,11 @@ import { env } from '$env/dynamic/private';
 const log = new Logger('/api/payment/webhook.server');
 
 export async function POST(req) {
+	log.debug('Entering POST handler');
 	const body: TelcoPaymentResponse = await req.request.json();
-
+	log.debug('body deserialised: ' + JSON.stringify(body));
 	let paymentInfo = await db.query.paymentsTable.findFirst({ where: eq(paymentsTable.paymentId, body.paymentId) });
+	log.debug('Payment info retrieved: ' + JSON.stringify(paymentInfo));
 	if (!paymentInfo) {
 		return new Response(JSON.stringify({ error: `Payment with ID ${body.paymentId} not found` }), { status: 404 });
 	}

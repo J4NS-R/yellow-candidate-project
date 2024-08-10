@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: $VITE_PG_PASS
+      POSTGRES_USER: $VITE_PG_USER
+      POSTGRES_DB: $VITE_PG_DB
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "$VITE_PG_DB" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Mock the payment provider (telco)
+  # See ./wiremock/mappings/README.md
+  wiremock:
+    image: wiremock/wiremock:3x
+    volumes:
+      - "../docker/wiremock:/home/wiremock"
+    environment:
+      WIREMOCK_OPTIONS: >
+        --port 8080
+        --max-request-journal-entries 20
+
+  proj:
+    image: ghcr.io/j4ns-r/yellow-candidate-project:0.0.1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      wiremock:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_PG_HOST: postgres
+      VITE_PG_DB: $VITE_PG_DB
+      VITE_PG_USER: $VITE_PG_USER
+      VITE_PG_PASS: $VITE_PG_PASS
+      VITE_MIN_AGE: $VITE_MIN_AGE
+      VITE_MAX_AGE: $VITE_MAX_AGE
+      VITE_UPSTREAM_PAYMENT_URL: http://wiremock:8080/payment
+      VITE_API_KEY: $VITE_API_KEY
+      ORIGIN: http://localhost:3000
