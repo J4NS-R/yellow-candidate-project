@@ -29,6 +29,13 @@ services:
       WIREMOCK_OPTIONS: >
         --port 8080
         --max-request-journal-entries 20
+        --verbose
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/__admin/mappings" ]
+      start_period: "1s"
+      retries: 3
+      timeout: "3s"
+      interval: "30s"
 
   express:
     build: './express'

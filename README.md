@@ -36,6 +36,30 @@ sequenceDiagram
     ws ->> client: Payment Approval
 ```
 
+## Infrastructure architecture
+
+```mermaid
+block-beta
+  columns 1
+  www(("WWW"))
+  space
+  block: lb
+    nodeing["Node App ALB"]
+    telcoing["Telco ALB"]
+  end
+  block: cluster
+    node["Node App"]
+    telco["Wiremock"]
+  end
+  space
+  db[("Database")]
+  www --> nodeing
+  www --> telcoing
+  nodeing --> node
+  telcoing --> telco
+  node --> db
+```
+
 ## Development
 
 ```sh

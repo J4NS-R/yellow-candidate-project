@@ -1,0 +1,38 @@
+name: Terraform
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - terraform/**
+      - .github/workflows/terraform.yaml
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.commits[0].message, '[release-type terraform]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: AWS Login
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::334550036524:role/github-actions-jans-candidate-project
+          aws-region: eu-west-1
+      - name: Setup Tofu
+        uses: opentofu/setup-opentofu@v1.0.3
+      - name: TF Prep
+        working-directory: terraform
+        run: |
+          tofu init
+          tofu validate
+      - name: TF Plan
+        working-directory: terraform
+        run: tofu plan -out ./plan
+      - name: TF Apply
+        working-directory: terraform
+        run: tofu apply -auto-approve ./plan
