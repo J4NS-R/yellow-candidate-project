@@ -2,7 +2,7 @@ name: Terraform
 on:
   push:
     branches:
-      - "terraform"  # TODO main
+      - "**"
     paths:
       - terraform/**
       - .github/workflows/terraform.yaml
@@ -14,6 +14,8 @@ permissions:
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.commits[0].message, '[release-type terraform]') }}
     steps:
       - uses: actions/checkout@v4
       - name: AWS Login

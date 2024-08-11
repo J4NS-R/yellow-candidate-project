@@ -23,12 +23,23 @@ Content-Type: application/json
 GET http://localhost:8080/__admin/mappings
 
 ###
-# @name Telco webhook
+# @name Telco webhook - localhost
 POST localhost:5173/api/payment/webhook
 Content-Type: application/json
 Origin: http://localhost:5173
 
 {
   "paymentId": "83da26a1-10ca-4440-9b76-9e99966eb98b",
+  "paymentStatus": "approved"
+}
+
+###
+# @name Telco webhook - prod
+POST https://app.yellow.rauten.co.za/api/payment/webhook
+Content-Type: application/json
+Origin: https://app.yellow.rauten.co.za:5173
+
+{
+  "paymentId": "59313333-753d-4b0d-8dc4-4cd0467d6232",
   "paymentStatus": "approved"
 }
