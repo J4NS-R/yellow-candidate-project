@@ -15,9 +15,10 @@
 
 	// On mount, open websocket client
 	onMount(() => {
-		const port = env.PUBLIC_DEBUG ? 3000 : window.location.port;
-		log.debug(`Connecting to websocket on port ${port}`);
-		const ws = new WebSocket(`ws://${window.location.hostname}:${port}`);
+		const wsTarget = env.PUBLIC_DEBUG ? `ws://${window.location.hostname}:3000` :
+			`wss://${window.location.hostname}`;
+		log.debug(`Connecting to websocket server: ${wsTarget}`);
+		const ws = new WebSocket(wsTarget);
 
 		ws.onopen = () => {
 			const payload = JSON.stringify({
