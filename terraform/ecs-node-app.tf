@@ -6,7 +6,7 @@ data "template_file" "node_app_defn" {
   template = file("./templates/node-app-defn.json.tpl")
 
   vars = {
-    image_tag            = "1.0.1"
+    image_tag            = "1.0.2"
     pg_host              = aws_db_instance.pg.address,
     pg_db                = aws_db_instance.pg.db_name,
     pg_user              = aws_db_instance.pg.username,
