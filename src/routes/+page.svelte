@@ -15,10 +15,6 @@
 	};
 </script>
 
-<svelte:head>
-	<title>Yellow Mobile</title>
-</svelte:head>
-
 <h1 class="text-3xl mb-4">Yellow Mobile</h1>
 
 <SimpleForm props={formConfig} />
