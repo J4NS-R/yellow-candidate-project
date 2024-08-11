@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "telco" {
 }
 
 resource "aws_ecs_service" "telco" {
-  name            = "${local.proj_name}-telco"
+  name            = "telco"
   task_definition = aws_ecs_task_definition.telco.arn
   desired_count   = 1
   cluster         = aws_ecs_cluster.cluster.arn
@@ -66,6 +66,15 @@ resource "aws_alb_target_group" "telco" {
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
+  health_check {
+    healthy_threshold   = "2"
+    interval            = "30"
+    protocol            = "HTTP"
+    matcher             = "200"
+    timeout             = "3"
+    path                = "/__admin/mappings"
+    unhealthy_threshold = "2"
+  }
 }
 resource "aws_alb_listener" "telco" {
   load_balancer_arn = aws_alb.telco_ingress.arn

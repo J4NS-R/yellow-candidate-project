@@ -24,7 +24,7 @@ data "template_file" "node_app_defn" {
 resource "aws_ecs_task_definition" "node" {
   container_definitions    = data.template_file.node_app_defn.rendered
   requires_compatibilities = ["FARGATE"]
-  family                   = "service"
+  family                   = "node-app"
   network_mode             = "awsvpc"
   execution_role_arn       = aws_iam_role.node_app.arn
   # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/fargate-tasks-services.html#fargate-tasks-size
@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "node" {
 }
 
 resource "aws_ecs_service" "node_app" {
-  name            = local.proj_name
+  name            = "node-app"
   task_definition = aws_ecs_task_definition.node.arn
   desired_count   = 1
   cluster         = aws_ecs_cluster.cluster.arn
