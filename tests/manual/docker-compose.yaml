@@ -25,7 +25,7 @@ services:
         --max-request-journal-entries 20
 
   proj:
-    image: ghcr.io/j4ns-r/yellow-candidate-project:0.0.1
+    image: ghcr.io/j4ns-r/yellow-candidate-project:1.0.1
     depends_on:
       postgres:
         condition: service_healthy
