@@ -41,7 +41,7 @@ jobs:
     name: Build & release image
     needs:
       - test
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.commits[0].message, '[release-type docker]') }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
